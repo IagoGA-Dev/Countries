@@ -104,9 +104,12 @@ export default function Country() {
             <section>
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">Population Over Time</h2>
                 <div className="bg-white rounded-lg shadow p-6">
-                    <Line data={populationChartData} />
+                    <div style={{ width: '100%', height: '400px' }}>
+                        <Line data={populationChartData} options={{ maintainAspectRatio: false }} />
+                    </div>
                 </div>
             </section>
         </main>
     );
 }
+
