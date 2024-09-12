@@ -1,6 +1,12 @@
 import express from 'express';
+import cors from 'cors';
+
 import countryRoutes from './routes/Countries';
 const app = express();
+
+app.use(cors({
+  origin: '*',
+}));
 
 app.use('/api/countries', countryRoutes);
 
