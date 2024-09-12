@@ -1,11 +1,17 @@
 import express from 'express';
 const router = express.Router();
+// Getting env variables
+const dotenv = require('dotenv');
+dotenv.config({ path: '../.env' });
+
+const NAGER_URL = process.env.NAGER_URL;
+const COUNTRIESNOW_URL = process.env.COUNTRIESNOW_URL;
 
 // Route to get all available countries
 router.get('/', async (req, res) => {
     try {
         // Fetch available countries 
-        const response = await fetch('https://date.nager.at/api/v3/AvailableCountries');
+        const response = await fetch(NAGER_URL + '/AvailableCountries');
         if (!response.ok) {
             throw new Error(`Failed to fetch countries: ${response.status} ${response.statusText}`);
         }
@@ -22,7 +28,7 @@ router.get('/:country', async (req, res) => {
     const countryIso2 = req.params.country;
     try {
         // Fetch country info 
-        const countryInfoResponse = await fetch(`https://date.nager.at/api/v3/CountryInfo/${countryIso2}`);
+        const countryInfoResponse = await fetch(NAGER_URL + `/CountryInfo/${countryIso2}`);
         if (!countryInfoResponse.ok) return res.status(404).json({ error: 'Country not found' });
         
         const countryInfoData = await countryInfoResponse.json();
@@ -33,7 +39,7 @@ router.get('/:country', async (req, res) => {
 
 
         // Fetch population 
-        const populationResponse = await fetch(`https://countriesnow.space/api/v0.1/countries/population`, {
+        const populationResponse = await fetch(COUNTRIESNOW_URL + `/countries/population`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ country: country })
@@ -45,7 +51,7 @@ router.get('/:country', async (req, res) => {
 
 
         // Fetch flag url 
-        const flagUrlResponse = await fetch(`https://countriesnow.space/api/v0.1/countries/flag/images`, {
+        const flagUrlResponse = await fetch(COUNTRIESNOW_URL + `/countries/flag/images`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ country: country })
